@@ -10,6 +10,7 @@ from src.api.models.exercises import Exercise  # noqa: F401
 from src.api.models.user_profiles import UserProfile  # noqa: F401
 from src.api.models.users import User  # noqa: F401
 from src.api.models.workout_plans import WorkoutPlans  # noqa: F401
+from src.api.models.workout_sessions import WorkoutSession  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
