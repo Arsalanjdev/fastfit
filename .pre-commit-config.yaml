@@ -1,8 +1,26 @@
 repos:
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  # Ruff version.
-  rev: v0.8.4
-  hooks:
-    - id: ruff
-      args: [ --fix ]
-    - id: ruff-format
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: ["--no-fix"]  # Lint only, no auto-fix
+      - id: ruff-format
+        args: ["--check"]   # Only check formatting, no changes
+
+  - repo: https://github.com/psf/black
+    rev: 24.4.2
+    hooks:
+      - id: black
+        # No --check or --diff means black will auto-fix on commit
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.9.0
+    hooks:
+      - id: mypy
+        # Default: only warns, no changes
+
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        # No --check-only means isort will auto-fix imports on commit
