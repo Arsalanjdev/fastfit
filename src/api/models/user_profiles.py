@@ -1,4 +1,5 @@
 import uuid
+from enum import Enum
 
 from sqlalchemy import (
     JSON,
@@ -11,10 +12,30 @@ from sqlalchemy import (
     Text,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 
 from .base import Base
+
+
+class GenderEnum(str, Enum):
+    male = "male"
+    female = "female"
+    other = "other"
+    unspecified = "unspecified"
+
+
+class FitnessLevelEnum(str, Enum):
+    beginner = "beginner"
+    intermediate = "intermediate"
+    advanced = "advanced"
+
+
+class PrimaryGoalEnum(str, Enum):
+    lose_weight = "lose_weight"
+    build_muscle = "build_muscle"
+    maintain_health = "maintain_health"
+    improve_endurance = "improve_endurance"
 
 
 class UserProfile(Base):
@@ -22,13 +43,25 @@ class UserProfile(Base):
     profile_id = Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False)
     birth_date = Column(Date, nullable=False)
-    gender = Column(String, nullable=False)
-    height_cm = Column(Numeric(5, 2), nullable=False, default=165)
-    weight_kg = Column(Numeric(5, 2), nullable=False, default=80)
-    fitness_level = Column(String, nullable=True)
-    primary_goal = Column(String, nullable=True)
+    gender = Column(
+        ENUM(GenderEnum, name="gender_enum", create_type=True),
+        nullable=False,
+        server_default=GenderEnum.unspecified.value,
+    )
+    height_cm = Column(Numeric(5, 2), nullable=False)
+    weight_kg = Column(Numeric(5, 2), nullable=False)
+    fitness_level = Column(
+        ENUM(FitnessLevelEnum, name="fitness_enum", create_type=True),
+        nullable=False,
+        server_default=FitnessLevelEnum.beginner.value,
+    )
+    primary_goal = Column(
+        ENUM(PrimaryGoalEnum, name="primary_goal_enum", create_type=True),
+        nullable=False,
+        server_default=PrimaryGoalEnum.maintain_health.value,
+    )
     medical_conditions = Column(Text, nullable=True)
-    preferences = Column(JSON, nullable=True)
+    preferences = Column(JSON, nullable=True, default=dict)
     updated_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),

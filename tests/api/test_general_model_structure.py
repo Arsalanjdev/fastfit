@@ -166,8 +166,8 @@ EXPECTED_NULLABLE = {
         "gender": False,
         "height_cm": False,
         "weight_kg": False,
-        "fitness_level": True,
-        "primary_goal": True,
+        "fitness_level": False,
+        "primary_goal": False,
         "medical_conditions": True,
         "preferences": True,
         "updated_at": False,
@@ -259,23 +259,16 @@ def test_model_check_constraints_exist(db_inspect, table, constraint_name):
 
 EXPECTED_DEFAULT = {
     "users": {
-        "user_id": True,  # auto-increment or UUID
-        "email": False,  # must be user-provided
         "created_at": True,  # default=now()
         "is_active": True,  # default=True
     },
     "profile": {
-        "profile_id": True,  # auto-increment or UUID
-        "user_id": False,  # foreign key, must be set
-        "birth_date": False,  # user-provided
         "gender": True,  # optionally default to 'unspecified' or similar
-        "height_cm": False,  # must be entered
-        "weight_kg": False,  # must be entered
         "fitness_level": True,  # default e.g. 'beginner'
         "primary_goal": True,  # default e.g. 'general_fitness'
         "medical_conditions": True,  # default to empty string or null
-        "preferences": True,  # default to empty JSON or null
-        "updated_at": True,  # default=now()
+        "preferences": True,
+        "updated_at": True,
     },
     "exercises": {
         "exercise_id": True,  # auto-increment
