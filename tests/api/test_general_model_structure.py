@@ -232,3 +232,25 @@ def test_model_column_nullable(db_inspect, table, column, expected_nullable):
     col_map = {column["name"]: column["nullable"] for column in columns}
     actual = col_map.get(column)
     assert actual == expected_nullable
+
+
+EXPECTED_CONSTRAINTS = {
+    "workout_sessions": [
+        "check_perceived_intensity_range",
+    ],
+    "plan_feedback": ["check_completion_percentage", "check_effectiveness_rating"],
+}
+
+
+@mark.parametrize(
+    "table,constraint_name",
+    [
+        (table, constraint)
+        for table, constraints in EXPECTED_CONSTRAINTS.items()
+        for constraint in constraints
+    ],
+)
+def test_model_check_constraints_exist(db_inspect, table, constraint_name):
+    column_checks = db_inspect.get_check_constraints(table)
+    check_list = [chk["name"] for chk in column_checks]
+    assert constraint_name in check_list
