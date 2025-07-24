@@ -26,4 +26,6 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest --cov=src --cov-report=term-missing --tb=short --disable-warnings
+          ls -R
+          pwd
+          pytest tests --cov=src --cov-report=term-missing --tb=short --disable-warnings
