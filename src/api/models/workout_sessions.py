@@ -34,3 +34,6 @@ class WorkoutSession(Base):
         ),
         Index("idx_user_sessions", "user_id"),
     )
+
+
+1

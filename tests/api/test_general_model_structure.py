@@ -2,6 +2,7 @@
 Tests the general structure checks for all models.
 """
 
+import pytest
 from pytest import mark
 
 # from .fixtures import db_inspect
@@ -254,3 +255,87 @@ def test_model_check_constraints_exist(db_inspect, table, constraint_name):
     column_checks = db_inspect.get_check_constraints(table)
     check_list = [chk["name"] for chk in column_checks]
     assert constraint_name in check_list
+
+
+EXPECTED_DEFAULT = {
+    "users": {
+        "user_id": True,  # auto-increment or UUID
+        "email": False,  # must be user-provided
+        "created_at": True,  # default=now()
+        "is_active": True,  # default=True
+    },
+    "profile": {
+        "profile_id": True,  # auto-increment or UUID
+        "user_id": False,  # foreign key, must be set
+        "birth_date": False,  # user-provided
+        "gender": True,  # optionally default to 'unspecified' or similar
+        "height_cm": False,  # must be entered
+        "weight_kg": False,  # must be entered
+        "fitness_level": True,  # default e.g. 'beginner'
+        "primary_goal": True,  # default e.g. 'general_fitness'
+        "medical_conditions": True,  # default to empty string or null
+        "preferences": True,  # default to empty JSON or null
+        "updated_at": True,  # default=now()
+    },
+    "exercises": {
+        "exercise_id": True,  # auto-increment
+        "name": False,  # required
+        "description": True,  # can default to empty string
+        "muscle_group": False,  # required
+        "equipment_required": True,  # default=False or empty
+        "difficulty": True,  # default e.g. 'medium'
+    },
+    "workout_sessions": {
+        "session_id": True,  # auto-increment
+        "user_id": False,  # required FK
+        "start_time": True,  # default=now()
+        "duration_minutes": False,  # user-entered
+        "perceived_intensity": True,  # default e.g. 5
+        "notes": True,  # default empty
+        "session_type": True,  # default e.g. 'custom'
+    },
+    "session_exercises": {
+        "session_exercise_id": True,  # auto-increment
+        "session_id": False,  # required FK
+        "exercise_id": False,  # required FK
+        "sets": True,  # default=3
+        "reps": True,  # default=10
+        "weight_kg": True,  # default=0.0
+        "distance_km": True,  # default=0.0
+        "notes": True,  # default empty
+    },
+    "workout_plans": {
+        "plan_id": True,  # auto-increment
+        "user_id": False,  # required
+        "generated_at": True,  # default=now()
+        "valid_from": True,  # default=now()
+        "valid_to": True,  # default=now() + 1 week
+        "focus_area": True,  # default e.g. 'full_body'
+        "ai_model_version": True,  # default current version
+        "plan_data": False,  # large data; must be filled by system
+    },
+    "plan_feedback": {
+        "feedback_id": True,  # auto-increment
+        "plan_id": False,  # required
+        "user_id": False,  # required
+        "completion_percentage": True,  # default=0
+        "effectiveness_rating": True,  # default=0 or null
+        "created_at": True,  # default=now()
+    },
+}
+
+
+@mark.parametrize(
+    "table,column,expected_default",
+    [
+        (table, column, expected_default)
+        for table, columns in EXPECTED_DEFAULT.items()
+        for column, expected_default in columns.items()
+    ],
+)
+def test_model_default_value_exist(db_inspect, table, column, expected_default):
+    columns = db_inspect.get_columns(table)
+    col_map = {colx["name"]: colx["default"] for colx in columns}
+    actual = col_map.get(column)
+    has_default_value = actual is not None
+    assert has_default_value == expected_default
