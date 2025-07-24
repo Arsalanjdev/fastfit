@@ -6,6 +6,7 @@ from alembic import context
 from sqlalchemy import create_engine, pool
 
 from src.api.models.base import Base
+from src.api.models.exercises import Exercise  # noqa: F401
 from src.api.models.user_profiles import UserProfile  # noqa: F401
 from src.api.models.users import User  # noqa: F401
 
