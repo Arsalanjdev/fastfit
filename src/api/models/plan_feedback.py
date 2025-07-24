@@ -24,7 +24,9 @@ class PlanFeedback(Base):
     )
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False)
     completion_percentage = Column(Integer, default=100, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
     effectiveness_rating = Column(Integer, nullable=True)
 
     plan = relationship("WorkoutPlans", back_populates="feedback")

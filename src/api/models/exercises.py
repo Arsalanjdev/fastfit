@@ -25,6 +25,6 @@ class Exercise(Base):
     equipment_required = Column(ARRAY(String(255)), nullable=True)
     difficulty = Column(
         ENUM(Difficulty, name="difficulty_enum"),
-        nullable=True,
+        nullable=False,
         default=Difficulty.BEGINNER,
     )

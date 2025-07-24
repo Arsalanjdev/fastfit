@@ -19,8 +19,8 @@ class SessionExercises(Base):
     exercise_id = Column(
         UUID(as_uuid=True), ForeignKey("exercises.exercise_id"), nullable=False
     )
-    sets = Column(Integer, nullable=False)
-    reps = Column(Integer, nullable=False)
+    sets = Column(Integer, nullable=True)
+    reps = Column(Integer, nullable=True)
     weight_kg = Column(Numeric(5, 2), nullable=True)
     distance_km = Column(Numeric(4, 2), nullable=True)
     notes = Column(Text, nullable=True)
