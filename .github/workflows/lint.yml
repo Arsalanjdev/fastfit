@@ -1,5 +1,6 @@
 name: Ruff Lint
-on: [push,pull_request]
+on: [push, pull_request]
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -11,12 +12,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install uv
+        run: |
+          pip install uv
+
       - name: Install dependencies
         run: |
-          pip install poetry
-          poetry install
-          poetry run pip install ruff  # optional: `poetry add --group dev ruff`
+          uv pip install .
+          uv pip install ruff
 
       - name: Run Ruff
         run: |
-          poetry run ruff check .
+          ruff check .
