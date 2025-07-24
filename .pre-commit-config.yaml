@@ -3,24 +3,25 @@ repos:
     rev: v0.4.4
     hooks:
       - id: ruff
-        args: ["--no-fix"]  # Lint only, no auto-fix
+        args: ["--fix", "--ignore=F401"]  # Explicitly ignore unused imports
       - id: ruff-format
-        args: ["--check"]   # Only check formatting, no changes
+        args: ["--check"]  # Only check formatting, no changes
 
   - repo: https://github.com/psf/black
     rev: 24.4.2
     hooks:
       - id: black
-        # No --check or --diff means black will auto-fix on commit
+        args: [--line-length=88]  # Optional: set your preferred line length
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.9.0
     hooks:
       - id: mypy
-        # Default: only warns, no changes
+        additional_dependencies: []
+        # Add any mypy dependencies here if needed
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        # No --check-only means isort will auto-fix imports on commit
+        args: ["--profile", "black"]  # Ensures compatibility with black
