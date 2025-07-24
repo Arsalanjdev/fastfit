@@ -11,6 +11,7 @@ from sqlalchemy import (
     String,
     Text,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
@@ -46,7 +47,7 @@ class UserProfile(Base):
     gender = Column(
         ENUM(GenderEnum, name="gender_enum", create_type=True),
         nullable=False,
-        server_default=GenderEnum.unspecified.value,
+        server_default=text(f"'{GenderEnum.unspecified.value}'::gender_enum"),
     )
     height_cm = Column(Numeric(5, 2), nullable=False)
     weight_kg = Column(Numeric(5, 2), nullable=False)
@@ -61,7 +62,7 @@ class UserProfile(Base):
         server_default=PrimaryGoalEnum.maintain_health.value,
     )
     medical_conditions = Column(Text, nullable=True)
-    preferences = Column(JSON, nullable=True, default=dict)
+    preferences = Column(JSON, nullable=True, server_default="{}")
     updated_at = Column(
         DateTime(timezone=True),
         server_default=func.now(),

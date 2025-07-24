@@ -8,6 +8,7 @@ from sqlalchemy import (
     Index,
     Integer,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -23,7 +24,7 @@ class PlanFeedback(Base):
         UUID(as_uuid=True), ForeignKey("workout_plans.plan_id"), nullable=False
     )
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False)
-    completion_percentage = Column(Integer, default=100, nullable=False)
+    completion_percentage = Column(Integer, server_default=text("0"), nullable=False)
     created_at = Column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

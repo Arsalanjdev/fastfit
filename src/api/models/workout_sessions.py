@@ -25,7 +25,7 @@ class WorkoutSession(Base):
     perceived_intensity = Column(Integer, nullable=True)
     duration_minutes = Column(Integer, nullable=True)
     notes = Column(Text, nullable=True)
-    session_type = Column(Text, nullable=True, default="general")
+    session_type = Column(Text, nullable=True, server_default="general")
 
     __table_args__ = (
         CheckConstraint(
