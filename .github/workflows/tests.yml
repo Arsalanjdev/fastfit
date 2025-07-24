@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv pip install -e . --system
-          uv pip install pytest pytest-cov alembic pytest-alembic --system
+          uv pip install pytest pytest-cov alembic pytest-alembic testcontainers --system
 
       - name: Run tests with coverage
         run: |
