@@ -7,6 +7,7 @@ from sqlalchemy import create_engine, pool
 
 from src.api.models.base import Base
 from src.api.models.exercises import Exercise  # noqa: F401
+from src.api.models.session_exercises import SessionExercises  # noqa: F401
 from src.api.models.user_profiles import UserProfile  # noqa: F401
 from src.api.models.users import User  # noqa: F401
 from src.api.models.workout_plans import WorkoutPlans  # noqa: F401
