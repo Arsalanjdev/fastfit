@@ -2,9 +2,7 @@
 Tests the general structure checks for all models.
 """
 
-import pytest
 from pytest import mark
-from sqlalchemy import text
 
 # from .fixtures import db_inspect
 
