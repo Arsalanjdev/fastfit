@@ -19,10 +19,10 @@ class Exercise(Base):
     exercise_id = Column(
         UUID(as_uuid=True), nullable=False, default=uuid.uuid4, primary_key=True
     )
-    name = Column(String(255), nullable=False)
+    name = Column(String(100), nullable=False)
     description = Column(Text, nullable=True)
-    muscle_group = Column(String(255), nullable=False)
-    equipment_required = Column(ARRAY(String(255)), nullable=True)
+    muscle_group = Column(String(50), nullable=False)
+    equipment_required = Column(ARRAY(String(100)), nullable=True)
     difficulty = Column(
         ENUM(Difficulty, name="difficulty_enum"),
         nullable=False,

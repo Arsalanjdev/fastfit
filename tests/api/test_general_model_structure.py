@@ -353,3 +353,49 @@ def test_model_check_constraints_exist(db_inspect, table, constraint_name):
 #     col = next((c for c in columns if c['name'] == column), None)
 #     has_default = col is not None and col.get('default') is not None
 #     assert has_default == expected_default
+
+
+EXPECTED_COLUMN_LENGTHS: dict[str, dict[str, int]] = {
+    "users": {
+        "email": 255,
+    },
+    "profile": {},
+    "exercises": {
+        "name": 100,
+        "muscle_group": 50,
+    },
+    "workout_sessions": {},
+    "workout_plans": {
+        "focus_area": 50,
+        "ai_model_version": 50,
+    },
+}
+
+
+@mark.parametrize(
+    "table,column,expected_length",
+    [
+        (table, column, expected_length)
+        for table, cols in EXPECTED_COLUMN_LENGTHS.items()
+        for column, expected_length in cols.items()
+    ],
+)
+def test_model_column_length(db_inspect, table, column, expected_length):
+    columns = db_inspect.get_columns(table)
+    col = next((c for c in columns if c["name"] == column), None)
+
+    # Verify column exists
+    assert col is not None, f"Column {column} not found in table {table}"
+
+    # Get the type object
+    col_type = col["type"]
+
+    # Verify it's a string type with length attribute
+    assert hasattr(
+        col_type, "length"
+    ), f"Column {table}.{column} is not a string type (has no length)"
+
+    # Verify the length matches
+    assert (
+        col_type.length == expected_length
+    ), f"Length mismatch for {table}.{column}: expected {expected_length}, got {col_type.length}"
