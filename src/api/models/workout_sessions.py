@@ -8,6 +8,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Text,
+    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -28,12 +29,10 @@ class WorkoutSession(Base):
     session_type = Column(Text, nullable=True, server_default="general")
 
     __table_args__ = (
+        UniqueConstraint("user_id", "start_time", name="uq_user_session_time"),
         CheckConstraint(
             "perceived_intensity BETWEEN 1 AND 10",
             name="check_perceived_intensity_range",
         ),
         Index("idx_user_sessions", "user_id"),
     )
-
-
-1

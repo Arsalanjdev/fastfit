@@ -1,6 +1,14 @@
 from uuid import uuid4
 
-from sqlalchemy import Column, ForeignKey, Index, Integer, Numeric, Text
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Index,
+    Integer,
+    Numeric,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -28,4 +36,7 @@ class SessionExercises(Base):
     session = relationship("WorkoutSession", back_populates="session_exercises")
     exercise = relationship("Exercise", back_populates="session_exercises")
 
-    __table_args__ = (Index("idx_session_exercises", "session_id"),)
+    __table_args__ = (
+        UniqueConstraint("session_id", "exercise_id", name="uq_session_exercise"),
+        Index("idx_session_exercises", "session_id"),
+    )

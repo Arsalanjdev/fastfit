@@ -1,6 +1,16 @@
 from uuid import uuid4
 
-from sqlalchemy import JSON, Column, Date, DateTime, ForeignKey, Index, String, func
+from sqlalchemy import (
+    JSON,
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -24,4 +34,9 @@ class WorkoutPlans(Base):
         "PlanFeedback", back_populates="workout_plans", cascade="all, delete-orphan"
     )
 
-    __table_args__ = (Index("ix_workout_plans_user_id", "user_id"),)
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "valid_from", "valid_to", name="uq_user_plan_dates"
+        ),
+        Index("ix_workout_plans_user_id", "user_id"),
+    )

@@ -7,6 +7,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    UniqueConstraint,
     func,
     text,
 )
@@ -41,5 +42,6 @@ class PlanFeedback(Base):
         CheckConstraint(
             "effectiveness_rating BETWEEN 1 AND 10", name="check_effectiveness_rating"
         ),
+        UniqueConstraint("plan_id", "user_id", name="uq_feedback_per_plan_user"),
         Index("idx_user_feedback", "user_id", "plan_id"),
     )

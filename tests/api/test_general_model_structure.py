@@ -399,3 +399,36 @@ def test_model_column_length(db_inspect, table, column, expected_length):
     assert (
         col_type.length == expected_length
     ), f"Length mismatch for {table}.{column}: expected {expected_length}, got {col_type.length}"
+
+
+# Multiple columns constraints
+EXPECTED_UNIQUE_CONSTRAINTS = {
+    "workout_sessions": [
+        "uq_user_session_time",
+    ],
+    "plan_feedback": [
+        "uq_feedback_per_plan_user",
+    ],
+    "session_exercises": [
+        "uq_session_exercise",
+    ],
+    "workout_plans": [
+        "uq_user_plan_dates",
+    ],
+}
+
+
+@mark.parametrize(
+    "table,constraint_name",
+    [
+        (table, name)
+        for table, names in EXPECTED_UNIQUE_CONSTRAINTS.items()
+        for name in names
+    ],
+)
+def test_model_unique_constraint_exists(db_inspect, table, constraint_name):
+    uniques = db_inspect.get_unique_constraints(table)
+    unique_names = {uc["name"] for uc in uniques}
+    assert (
+        constraint_name in unique_names
+    ), f"Unique constraint '{constraint_name}' not found in table '{table}'"
