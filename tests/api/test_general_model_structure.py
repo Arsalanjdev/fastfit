@@ -27,6 +27,7 @@ EXPECTED_SCHEMAS = {
     "users": {
         "user_id": "UUID",
         "email": "String",
+        "password": "String",
         "created_at": "DateTime",
         "is_active": "Boolean",
     },
@@ -155,6 +156,7 @@ EXPECTED_NULLABLE = {
     "users": {
         "user_id": False,
         "email": False,
+        "password": False,
         "created_at": False,
         "is_active": False,
     },
@@ -356,6 +358,7 @@ def test_model_check_constraints_exist(db_inspect, table, constraint_name):
 EXPECTED_COLUMN_LENGTHS: dict[str, dict[str, int]] = {
     "users": {
         "email": 255,
+        "password": 128,
     },
     "profile": {},
     "exercises": {
