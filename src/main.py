@@ -1,13 +1,13 @@
 import logging
+import logging.config
+import os
 
-from fastapi import APIRouter
+from fastapi import FastAPI
 
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
-
 logger = logging.getLogger("fastfitapi")
 
-
-app = APIRouter()
+app = FastAPI()
 
 
 @app.get("/")
