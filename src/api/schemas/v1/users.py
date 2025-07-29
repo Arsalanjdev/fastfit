@@ -1,7 +1,15 @@
+import uuid
 from datetime import datetime
+from enum import Enum
 from typing import Annotated, Optional
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+
+
+class UserEnum(str, Enum):
+    user = "user"
+    coach = "coach"
+    admin = "admin"
 
 
 class UserAuthBase(BaseModel):
@@ -14,19 +22,18 @@ class UserAuthBase(BaseModel):
 
 
 class UserRead(BaseModel):
+    user_id: Annotated[uuid.UUID, Field(description="User ID")]
     email: Annotated[EmailStr, Field(description="User email")]
     created_at: Annotated[
         datetime, Field(description="Data time of when user was created.")
     ]
     is_active: Annotated[bool, Field(description="Is the user active?")]
+    role: Annotated[UserEnum, Field(description="The role of the user")]
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserCreate(UserAuthBase):
-    password: Annotated[str, Field(description="Password of the user")]
-
     @field_validator("password")
     def password_complexity(cls, password: str):
         if len(password) < 8:

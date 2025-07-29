@@ -33,7 +33,7 @@ class SessionExercises(Base):
     distance_km = Column(Numeric(4, 2), nullable=True)
     notes = Column(Text, nullable=True)
 
-    session = relationship("WorkoutSession", back_populates="session_exercises")
+    session = relationship("WorkoutSession", back_populates="exercise")
     exercise = relationship("Exercise", back_populates="session_exercises")
 
     __table_args__ = (

@@ -31,7 +31,7 @@ class WorkoutPlans(Base):
 
     user = relationship("User", back_populates="workout_plans")
     feedback = relationship(
-        "PlanFeedback", back_populates="workout_plans", cascade="all, delete-orphan"
+        "PlanFeedback", back_populates="feedback_plan", cascade="all, delete-orphan"
     )
 
     __table_args__ = (

@@ -11,6 +11,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from .base import Base
 
@@ -27,6 +28,8 @@ class WorkoutSession(Base):
     duration_minutes = Column(Integer, nullable=True)
     notes = Column(Text, nullable=True)
     session_type = Column(Text, nullable=True, server_default="general")
+
+    exercise = relationship("SessionExercises", back_populates="session")
 
     __table_args__ = (
         UniqueConstraint("user_id", "start_time", name="uq_user_session_time"),

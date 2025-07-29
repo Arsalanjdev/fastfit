@@ -3,6 +3,7 @@ import uuid
 
 from sqlalchemy import Column, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY, ENUM, UUID
+from sqlalchemy.orm import relationship
 
 from .base import Base
 
@@ -28,3 +29,5 @@ class Exercise(Base):
         nullable=False,
         default=Difficulty.BEGINNER,
     )
+
+    session_exercises = relationship("SessionExercises", back_populates="exercise")

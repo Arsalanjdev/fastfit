@@ -31,7 +31,7 @@ class PlanFeedback(Base):
     )
     effectiveness_rating = Column(Integer, nullable=True)
 
-    plan = relationship("WorkoutPlans", back_populates="feedback")
+    feedback_plan = relationship("WorkoutPlans", back_populates="feedback")
     user = relationship("User", back_populates="feedback")
 
     __table_args__ = (

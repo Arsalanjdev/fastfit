@@ -5,13 +5,13 @@ repos:
       - id: ruff
         args: ["--fix", "--ignore=F401"]  # Explicitly ignore unused imports
       - id: ruff-format
-        args: ["--check"]  # Only check formatting, no changes
-
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-        args: [--line-length=88]  # Optional: set your preferred line length
+#        args: ["--fix"]  # Only check formatting, no changes
+#
+#  - repo: https://github.com/psf/black
+#    rev: 24.4.2
+#    hooks:
+#      - id: black
+#        args: [--line-length=88]  # Optional: set your preferred line length
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.9.0

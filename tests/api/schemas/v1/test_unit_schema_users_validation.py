@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 import pytest
@@ -13,18 +14,6 @@ EmailValidator = TypeAdapter(EmailStr)
 
 @composite
 def passwords(draw):
-    """
-    Generate a randomized password string of exactly 8 characters.
-
-    The password will always include at least one uppercase letter,
-    one lowercase letter, one digit, and one special character
-    (punctuation or currency symbol). The remaining characters are
-    randomly chosen from a broad set excluding whitespace control
-    characters.
-
-    Returns:
-        str: A shuffled 8-character password meeting the above criteria.
-    """
     uppercase = characters(whitelist_categories=["Lu"])
     lowercase = characters(whitelist_categories=["Ll"])
     digits = characters(whitelist_categories=["Nd"])
@@ -45,21 +34,28 @@ def passwords(draw):
     password_list = list(
         uppercase_char + lowercase_char + digit_char + special_char + others
     )
-
     rng = draw(st.randoms())
     rng.shuffle(password_list)
-
     return "".join(password_list)
 
 
-@given(email=st.emails(), is_active=st.booleans(), created_at=st.datetimes())
-def test_schema_users_read(email: str, is_active: bool, created_at: datetime):
+@given(
+    user_id=st.uuids(),
+    email=st.emails(),
+    is_active=st.booleans(),
+    created_at=st.datetimes(),
+)
+def test_schema_users_read(
+    user_id: uuid.UUID, email: str, is_active: bool, created_at: datetime
+):
     valid_data = {
+        "user_id": user_id,
         "email": email,
         "is_active": is_active,
         "created_at": created_at,
     }
     read_user = UserRead(**valid_data)
+    assert read_user.user_id == user_id
     assert read_user.email == EmailValidator.validate_python(email)
     assert read_user.is_active == is_active
     assert read_user.created_at == created_at
@@ -67,14 +63,18 @@ def test_schema_users_read(email: str, is_active: bool, created_at: datetime):
 
 def test_user_read_invalid_email():
     with pytest.raises(ValidationError):
-        UserRead(email="not-an-email", is_active=True, created_at=datetime.now())
+        UserRead(
+            user_id=uuid.uuid4(),
+            email="not-an-email",
+            is_active=True,
+            created_at=datetime.now(),
+        )
 
 
 @given(email=st.emails(), password=passwords())
 def test_schema_users_create(email: str, password: str):
     valid_data = {"email": email, "password": password}
     user_created = UserCreate(**valid_data)
-
     assert user_created.email == EmailValidator.validate_python(email.lower())
     assert user_created.password == password
 
@@ -82,12 +82,12 @@ def test_schema_users_create(email: str, password: str):
 @pytest.mark.parametrize(
     "bad_password",
     [
-        "hello"  # short password,
+        "hello",  # short password
         "alllowercase1!",  # no uppercase
         "ALLUPPERCASE1!",  # no lowercase
         "NoDigits!!!",  # no digits
         "NoSpecial123",  # no special chars
-        "      1A!",  # whitespace (might want to allow or not)
+        "      1A!",  # whitespace (optional: your logic might allow/disallow)
     ],
 )
 def test_schema_users_create_bad_password(bad_password):
@@ -111,7 +111,12 @@ def test_email_normalization():
 
 
 def test_user_read_dict_roundtrip():
-    user = UserRead(email="test@example.com", is_active=True, created_at=datetime.now())
+    user = UserRead(
+        user_id=uuid.uuid4(),
+        email="test@example.com",
+        is_active=True,
+        created_at=datetime.now(),
+    )
     user_dict = user.model_dump()
     user2 = UserRead(**user_dict)
     assert user == user2
@@ -127,8 +132,7 @@ def test_user_read_dict_roundtrip():
     ],
 )
 def test_password_length_boundaries(length, should_pass):
-    """Test password length requirements."""
-    password = "A" * (length - 3) + "a1!"  # ensure meets other requirements
+    password = "A" * (length - 3) + "a1!"  # ensure other requirements met
     if should_pass:
         UserCreate(email="test@example.com", password=password)
     else:
@@ -137,25 +141,29 @@ def test_password_length_boundaries(length, should_pass):
 
 
 def test_timezone_aware_datetime():
-    """Test that timezone-aware datetimes are handled correctly."""
     from datetime import timezone
 
     tz_aware = datetime.now(timezone.utc)
-    user = UserRead(email="test@example.com", is_active=True, created_at=tz_aware)
+    user = UserRead(
+        user_id=uuid.uuid4(),
+        email="test@example.com",
+        is_active=True,
+        created_at=tz_aware,
+    )
     assert user.created_at == tz_aware
 
 
 def test_invalid_field_types():
-    """Test that incorrect field types are rejected."""
     with pytest.raises(ValidationError):
-        UserRead(email=123, is_active="yes", created_at="not a date")
+        UserRead(
+            user_id="not-a-uuid", email=123, is_active="yes", created_at="not a date"
+        )
 
     with pytest.raises(ValidationError):
         UserCreate(email=123, password=12345678)
 
 
 def test_case_sensitive_email_handling():
-    """If your model is configured to be case-insensitive for certain operations"""
     user1 = UserCreate(email="TEST@example.com", password="Valid123!")
     user2 = UserCreate(email="test@EXAMPLE.com", password="Valid123!")
     assert user1.email == user2.email
@@ -163,7 +171,10 @@ def test_case_sensitive_email_handling():
 
 def test_json_serialization():
     user = UserRead(
-        email="test@example.com", is_active=True, created_at=datetime(2023, 1, 1, 12, 0)
+        user_id=uuid.uuid4(),
+        email="test@example.com",
+        is_active=True,
+        created_at=datetime(2023, 1, 1, 12, 0),
     )
     json_str = user.model_dump_json()
     user2 = UserRead.model_validate_json(json_str)
