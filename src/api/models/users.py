@@ -1,10 +1,17 @@
 import uuid
+from enum import Enum
 
 from sqlalchemy import Boolean, Column, DateTime, String, func
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 
 from .base import Base
+
+
+class UserRole(str, Enum):
+    user = "user"
+    coach = "coach"  # Can view and edit fitness exercises
+    admin = "admin"
 
 
 class User(Base):
@@ -16,6 +23,9 @@ class User(Base):
     )
     is_active = Column(Boolean, nullable=False, server_default="true")
     password = Column(String(128), nullable=False)
+    role = Column(
+        ENUM(UserRole, name="user_role_enum"), server_default="user", nullable=False
+    )
 
     profile = relationship("UserProfile", back_populates="user", uselist=False)
     workout_plans = relationship(

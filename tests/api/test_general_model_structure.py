@@ -30,6 +30,7 @@ EXPECTED_SCHEMAS = {
         "password": "String",
         "created_at": "DateTime",
         "is_active": "Boolean",
+        "role": "String",
     },
     "profile": {
         "profile_id": "UUID",
@@ -159,6 +160,7 @@ EXPECTED_NULLABLE = {
         "password": False,
         "created_at": False,
         "is_active": False,
+        "role": False,
     },
     "profile": {
         "profile_id": False,
