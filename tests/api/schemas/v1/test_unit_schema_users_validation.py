@@ -75,7 +75,7 @@ def test_schema_users_create(email: str, password: str):
     valid_data = {"email": email, "password": password}
     user_created = UserCreate(**valid_data)
 
-    assert user_created.email == EmailValidator.validate_python(email)
+    assert user_created.email == EmailValidator.validate_python(email.lower())
     assert user_created.password == password
 
 
@@ -87,9 +87,84 @@ def test_schema_users_create(email: str, password: str):
         "ALLUPPERCASE1!",  # no lowercase
         "NoDigits!!!",  # no digits
         "NoSpecial123",  # no special chars
-        # TODO: check against common passwords
+        "      1A!",  # whitespace (might want to allow or not)
     ],
 )
 def test_schema_users_create_bad_password(bad_password):
     with pytest.raises(ValidationError):
         UserCreate(email="example@example.com", password=bad_password)
+
+
+def test_user_create_missing_email():
+    with pytest.raises(ValidationError):
+        UserCreate(password="Valid123!")
+
+
+def test_user_create_missing_password():
+    with pytest.raises(ValidationError):
+        UserCreate(email="test@example.com")
+
+
+def test_email_normalization():
+    user = UserCreate(email="Test@Example.COM", password="Valid123!")
+    assert user.email == "test@example.com"
+
+
+def test_user_read_dict_roundtrip():
+    user = UserRead(email="test@example.com", is_active=True, created_at=datetime.now())
+    user_dict = user.model_dump()
+    user2 = UserRead(**user_dict)
+    assert user == user2
+
+
+@pytest.mark.parametrize(
+    "length,should_pass",
+    [
+        (7, False),  # below minimum
+        (8, True),  # exact minimum
+        (64, True),  # reasonable upper bound
+        (128, True),  # very long password
+    ],
+)
+def test_password_length_boundaries(length, should_pass):
+    """Test password length requirements."""
+    password = "A" * (length - 3) + "a1!"  # ensure meets other requirements
+    if should_pass:
+        UserCreate(email="test@example.com", password=password)
+    else:
+        with pytest.raises(ValidationError):
+            UserCreate(email="test@example.com", password=password)
+
+
+def test_timezone_aware_datetime():
+    """Test that timezone-aware datetimes are handled correctly."""
+    from datetime import timezone
+
+    tz_aware = datetime.now(timezone.utc)
+    user = UserRead(email="test@example.com", is_active=True, created_at=tz_aware)
+    assert user.created_at == tz_aware
+
+
+def test_invalid_field_types():
+    """Test that incorrect field types are rejected."""
+    with pytest.raises(ValidationError):
+        UserRead(email=123, is_active="yes", created_at="not a date")
+
+    with pytest.raises(ValidationError):
+        UserCreate(email=123, password=12345678)
+
+
+def test_case_sensitive_email_handling():
+    """If your model is configured to be case-insensitive for certain operations"""
+    user1 = UserCreate(email="TEST@example.com", password="Valid123!")
+    user2 = UserCreate(email="test@EXAMPLE.com", password="Valid123!")
+    assert user1.email == user2.email
+
+
+def test_json_serialization():
+    user = UserRead(
+        email="test@example.com", is_active=True, created_at=datetime(2023, 1, 1, 12, 0)
+    )
+    json_str = user.model_dump_json()
+    user2 = UserRead.model_validate_json(json_str)
+    assert user == user2

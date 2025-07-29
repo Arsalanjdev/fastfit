@@ -8,6 +8,10 @@ class UserAuthBase(BaseModel):
     email: Annotated[EmailStr, Field(description="User email")]
     password: Annotated[str, Field(description="User password")]
 
+    @field_validator("email")
+    def email_normalization(cls, v: str):
+        return v.lower()
+
 
 class UserRead(BaseModel):
     email: Annotated[EmailStr, Field(description="User email")]
