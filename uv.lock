@@ -309,7 +309,7 @@ requires-dist = [
 dev = [
     { name = "alembic", specifier = ">=1.16.4" },
     { name = "faker", specifier = ">=37.4.2" },
-    { name = "hypothesis", specifier = ">=6.136.6" },
+    { name = "hypothesis", extras = ["faker"], specifier = ">=6.136.6" },
     { name = "psycopg2", extras = ["binary"], specifier = ">=2.9.10" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pytest", specifier = ">=8.4.1" },
