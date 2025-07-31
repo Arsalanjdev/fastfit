@@ -16,26 +16,7 @@ from sqlalchemy.dialects.postgresql import ENUM, UUID
 from sqlalchemy.orm import relationship
 
 from .base import Base
-
-
-class GenderEnum(str, Enum):
-    male = "male"
-    female = "female"
-    other = "other"
-    unspecified = "unspecified"
-
-
-class FitnessLevelEnum(str, Enum):
-    beginner = "beginner"
-    intermediate = "intermediate"
-    advanced = "advanced"
-
-
-class PrimaryGoalEnum(str, Enum):
-    lose_weight = "lose_weight"
-    build_muscle = "build_muscle"
-    maintain_health = "maintain_health"
-    improve_endurance = "improve_endurance"
+from .enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 
 
 class UserProfile(Base):

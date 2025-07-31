@@ -6,12 +6,7 @@ from sqlalchemy.dialects.postgresql import ARRAY, ENUM, UUID
 from sqlalchemy.orm import relationship
 
 from .base import Base
-
-
-class Difficulty(str, enum.Enum):
-    BEGINNER = "Beginner"
-    INTERMEDIATE = "Intermediate"
-    ADVANCED = "Advanced"
+from .enums import Difficulty
 
 
 class Exercise(Base):
