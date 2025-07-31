@@ -28,3 +28,6 @@ async def sign_up(create_data: UserCreate, db: Session = Depends(get_db)):
 )
 async def sign_in(login_data: UserLogin, db: Session = Depends(get_db)):
     pass
+
+
+# TODO change password
