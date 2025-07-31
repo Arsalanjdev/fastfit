@@ -1,17 +1,12 @@
 import uuid
-from enum import Enum
+from typing import Optional
 
 from sqlalchemy import Boolean, Column, DateTime, String, func
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from .base import Base
-
-
-class UserRole(str, Enum):
-    user = "user"
-    coach = "coach"  # Can view and edit fitness exercises
-    admin = "admin"
+from .enums import UserRole
 
 
 class User(Base):
@@ -24,15 +19,29 @@ class User(Base):
     is_active = Column(Boolean, nullable=False, server_default="true")
     password = Column(String(128), nullable=False)
     role = Column(
-        ENUM(UserRole, name="user_role_enum"), server_default="user", nullable=False
+        ENUM(UserRole, name="user_role_enum"),
+        server_default=UserRole.user.value,
+        nullable=False,
     )
 
-    profile = relationship("UserProfile", back_populates="user", uselist=False)
+    profile = relationship(
+        "UserProfile",
+        back_populates="user",
+        uselist=False,
+        passive_deletes=True,
+        cascade="all, delete-orphan",
+    )
     workout_plans = relationship(
-        "WorkoutPlans", back_populates="user", cascade="all, delete-orphan"
+        "WorkoutPlans",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
     feedback = relationship(
-        "PlanFeedback", back_populates="user", cascade="all, delete-orphan"
+        "PlanFeedback",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
     )
 
     def __repr__(self) -> str:

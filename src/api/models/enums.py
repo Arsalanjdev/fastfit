@@ -5,6 +5,13 @@ Enum data types for models. It's better to have all the enums here for better ma
 from enum import Enum
 
 
+# for users
+class UserRole(str, Enum):
+    user = "user"
+    coach = "coach"  # Can view and edit fitness exercises
+    admin = "admin"
+
+
 # for profile
 class GenderEnum(str, Enum):
     male = "male"

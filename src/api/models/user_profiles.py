@@ -1,5 +1,4 @@
 import uuid
-from enum import Enum
 
 from sqlalchemy import (
     JSON,
@@ -13,7 +12,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from .base import Base
 from .enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
@@ -23,7 +22,10 @@ class UserProfile(Base):
     __tablename__ = "profile"
     profile_id = Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
     user_id = Column(
-        UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False, unique=True
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
     )
     birth_date = Column(Date, nullable=False)
     gender = Column(

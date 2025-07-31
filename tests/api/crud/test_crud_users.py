@@ -2,12 +2,14 @@
 Tests for crud operations on db
 """
 
-from datetime import datetime
+from datetime import date
+from decimal import Decimal
 from uuid import uuid4
 
 import pytest
 from sqlalchemy.exc import IntegrityError
 
+from src.api.crud.profile import get_profile_by_id
 from src.api.crud.users import (
     create_user_db,
     create_user_with_profile,
@@ -15,6 +17,7 @@ from src.api.crud.users import (
     get_user_by_email,
     get_user_by_id,
 )
+from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 from tests.utils import is_iso_datetime, is_valid_uuid
 
 # @contextmanager
@@ -59,8 +62,7 @@ def test_crud_user_create(db_session):
 def test_crud_create_user_with_profile(db_session):
     email = "example@mail.com"
     password = "12345"
-    birthdate = datetime.now().isoformat()
-    user = create_user_db(db_session, email, password)
+    birthdate = date(1970, 1, 1)
     user, profile = create_user_with_profile(
         db=db_session,
         email=email,
@@ -68,7 +70,17 @@ def test_crud_create_user_with_profile(db_session):
         birth_date=birthdate,
         height_cm=120.34,
         weight_kg=80.74,
+        fitness_level=FitnessLevelEnum.beginner,
+        primary_goal=PrimaryGoalEnum.maintain_health,
+        gender=GenderEnum.male,
+        medical_conditions=None,
+        preferences={"workout_time": "morning"},
     )
+    assert profile.user_id == user.user_id
+    assert profile.birth_date == birthdate
+    assert profile.fitness_level.value == "beginner"
+    assert profile.gender.value == "male"
+    assert profile.preferences["workout_time"] == "morning"
 
 
 def test_crud_user_create_duplicated_email(db_session):
@@ -159,3 +171,28 @@ def test_crud_user_deletion_non_existent_user(db_session):
     delete_user_db(db_session, user_id=user.user_id)
     second_time = delete_user_db(db_session, user_id=user.user_id)
     assert second_time is False
+
+
+def test_delete_user_also_deletes_profile(db_session):
+    # Arrange: create a user with a profile
+    user, profile = create_user_with_profile(
+        db_session,
+        email="cascade@example.com",
+        password="12345",
+        birth_date=date(1990, 1, 1),
+        height_cm=Decimal("180.0"),
+        weight_kg=Decimal("75.0"),
+        fitness_level=FitnessLevelEnum.beginner,
+        primary_goal=PrimaryGoalEnum.maintain_health,
+        gender=GenderEnum.male,
+    )
+    db_session.commit()
+
+    profile_id = profile.profile_id
+    user_id = user.user_id
+
+    result = delete_user_db(db_session, user_id=user_id)
+
+    assert result is True
+    assert get_user_by_id(db_session, user_id) is None
+    assert get_profile_by_id(db_session, profile_id) is None
