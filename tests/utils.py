@@ -1,3 +1,6 @@
+import uuid
+from datetime import datetime
+
 import hypothesis.strategies as st
 from hypothesis.strategies import characters, composite, text
 
@@ -27,3 +30,19 @@ def passwords(draw):
     rng = draw(st.randoms())
     rng.shuffle(password_list)
     return "".join(password_list)
+
+
+def is_valid_uuid(value: str) -> bool:
+    try:
+        uuid.UUID(value)
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def is_iso_datetime(s: str) -> bool:
+    try:
+        datetime.fromisoformat(s.replace("Z", "+00:00"))
+        return True
+    except ValueError:
+        return False

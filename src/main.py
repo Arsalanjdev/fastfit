@@ -13,7 +13,9 @@ Base.metadata.create_all(bind=engine)
 
 
 fastfitapi = FastAPI()
-fastfitapi.include_router(users.router, prefix="/v1")
+fastfitapi.include_router(
+    users.router, prefix="/v1", tags=["v1", "user", "authentication"]
+)
 
 
 @fastfitapi.get("/")

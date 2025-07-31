@@ -13,3 +13,5 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(pytest.mark.schema)
         if "endpoint" in str(item.fspath):
             item.add_marker(pytest.mark.endpoint)
+        if "crud" in str(item.fspath):
+            item.add_marker(pytest.mark.crud)

@@ -18,10 +18,11 @@ dependencies = [
 dev = [
     "alembic>=1.16.4",
     "faker>=37.4.2",
-    "hypothesis[faker]>=6.136.6",
+    "hypothesis>=6.136.6",
     "psycopg2-binary>=2.9.10",
     "psycopg2[binary]>=2.9.10",
     "pytest>=8.4.1",
     "pytest-alembic>=0.12.1",
+    "pytest-asyncio>=1.1.0",
     "testcontainers[postgres]>=4.12.0",
 ]

@@ -5,22 +5,7 @@ import httpx
 from fastapi.encoders import jsonable_encoder
 
 from tests.factories.models import get_random_user_dict
-
-
-def is_valid_uuid(value: str) -> bool:
-    try:
-        uuid.UUID(value)
-        return True
-    except (ValueError, TypeError):
-        return False
-
-
-def is_iso_datetime(s: str) -> bool:
-    try:
-        datetime.fromisoformat(s.replace("Z", "+00:00"))
-        return True
-    except ValueError:
-        return False
+from tests.utils import is_iso_datetime, is_valid_uuid
 
 
 def test_endpoint_users_create(client: httpx.Client, monkeypatch):
@@ -59,3 +44,12 @@ def test_endpoint_users_create(client: httpx.Client, monkeypatch):
 def test_endpoint_users_signup_missing_email(client):
     response = client.post("/v1/users/sign-up", json={"password": "dawiooYAR(W*Y%124"})
     assert response.status_code == 422
+
+
+def test_endpoint_users_signup_missing_password(client):
+    response = client.post("/v1/users/sign-up", json={"email": "mail@example.com"})
+    assert response.status_code == 422
+
+
+def test_endpoint_users_signin(client):
+    pass
