@@ -36,7 +36,7 @@ class PrimaryGoalEnum(str, Enum):
 # exercises
 
 
-class Difficulty(str, Enum):
+class DifficultyEnum(str, Enum):
     BEGINNER = "Beginner"
     INTERMEDIATE = "Intermediate"
     ADVANCED = "Advanced"

@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from uuid import UUID
 
 import hypothesis.strategies as st
 from hypothesis.strategies import characters, composite, text
@@ -32,7 +33,9 @@ def passwords(draw):
     return "".join(password_list)
 
 
-def is_valid_uuid(value: str) -> bool:
+def is_valid_uuid(value: str | UUID) -> bool:
+    if isinstance(value, UUID):
+        return True
     try:
         uuid.UUID(value)
         return True

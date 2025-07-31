@@ -3,9 +3,7 @@ from decimal import Decimal
 
 import pytest
 
-from src import UserProfile
 from src.api.crud.profile import (
-    delete_profile_from_db,
     get_profile_by_email,
     get_profile_by_id,
     update_profile_field,

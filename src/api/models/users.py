@@ -1,9 +1,8 @@
 import uuid
-from typing import Optional
 
 from sqlalchemy import Boolean, Column, DateTime, String, func
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import relationship
 
 from .base import Base
 from .enums import UserRole

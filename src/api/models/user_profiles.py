@@ -12,7 +12,7 @@ from sqlalchemy import (
     text,
 )
 from sqlalchemy.dialects.postgresql import ENUM, UUID
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import relationship
 
 from .base import Base
 from .enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum

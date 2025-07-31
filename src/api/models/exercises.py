@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import ARRAY, ENUM, UUID
 from sqlalchemy.orm import relationship
 
 from .base import Base
-from .enums import Difficulty
+from .enums import DifficultyEnum
 
 
 class Exercise(Base):
@@ -19,9 +19,9 @@ class Exercise(Base):
     muscle_group = Column(String(50), nullable=False)
     equipment_required = Column(ARRAY(String(100)), nullable=True)
     difficulty = Column(
-        ENUM(Difficulty, name="difficulty_enum"),
+        ENUM(DifficultyEnum, name="difficulty_enum"),
         nullable=False,
-        default=Difficulty.BEGINNER,
+        default=DifficultyEnum.BEGINNER,
     )
 
     session_exercises = relationship("SessionExercises", back_populates="exercise")
