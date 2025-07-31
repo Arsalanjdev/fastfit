@@ -2,6 +2,7 @@
 Tests for crud operations on db
 """
 
+from datetime import datetime
 from uuid import uuid4
 
 import pytest
@@ -9,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 
 from src.api.crud.users import (
     create_user_db,
+    create_user_with_profile,
     delete_user_db,
     get_user_by_email,
     get_user_by_id,
@@ -52,6 +54,21 @@ def test_crud_user_create(db_session):
     assert user.is_active
     db_session.delete(user)
     db_session.commit()
+
+
+def test_crud_create_user_with_profile(db_session):
+    email = "example@mail.com"
+    password = "12345"
+    birthdate = datetime.now().isoformat()
+    user = create_user_db(db_session, email, password)
+    user, profile = create_user_with_profile(
+        db=db_session,
+        email=email,
+        password=password,
+        birth_date=birthdate,
+        height_cm=120.34,
+        weight_kg=80.74,
+    )
 
 
 def test_crud_user_create_duplicated_email(db_session):

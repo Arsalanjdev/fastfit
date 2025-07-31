@@ -17,6 +17,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "alembic>=1.16.4",
+    "black>=25.1.0",
     "faker>=37.4.2",
     "hypothesis>=6.136.6",
     "psycopg2-binary>=2.9.10",
