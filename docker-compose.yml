@@ -28,8 +28,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src:/code/app
-    command: ["/code/.venv/bin/uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+      - ./src:/code/src
+    command: ["/code/.venv/bin/uvicorn", "src.main:fastfitapi", "--host", "0.0.0.0", "--port", "8080"]
 
 
 volumes:

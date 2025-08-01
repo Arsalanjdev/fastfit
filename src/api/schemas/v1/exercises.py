@@ -22,7 +22,7 @@ class ExerciseBase(BaseModel):
         ),
     ]
     equipment_required: Annotated[
-        list[str],
+        Optional[list[str]],
         Field(
             description="Equipments that are required for the exercise",
             default_factory=list,

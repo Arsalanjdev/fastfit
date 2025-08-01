@@ -10,9 +10,10 @@ from testcontainers.postgres import PostgresContainer
 
 @pytest.fixture(scope="session")
 def db_url():
+    os.environ["ENV"] = "test"
     with PostgresContainer("postgres:17") as container:
         url = container.get_connection_url()
-        os.environ["TEST_DB_URL"] = url
+        os.environ["DATABASE_URL"] = url
         alembic_config = Config("alembic.ini")
         alembic_config.set_main_option("sqlalchemy.url", url)
         upgrade(alembic_config, "head")

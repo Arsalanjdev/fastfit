@@ -1,0 +1,105 @@
+.
+├── alembic.ini
+├── app.log
+├── docker-compose.yml
+├── Dockerfile
+├── logging.conf
+├── migrations
+│   ├── env.py
+│   ├── README
+│   ├── script.py.mako
+│   └── versions
+│       ├── 062494f6dbe2_workout_plans_done.py
+│       ├── 0fefd6c89856_exercises_done.py
+│       ├── 10c65c40427f_user_role_added.py
+│       ├── 180a2710313a_one_to_one_profile_user.py
+│       ├── 1da2995a16c9_session_exercises_added.py
+│       ├── 40d42d1ef483_profile_default.py
+│       ├── 4bc05df4e716_profile_default.py
+│       ├── 4c019a21ab29_plan_feedback_done.py
+│       ├── 4cca3626b83e_initial.py
+│       ├── 4fe7bf7bfd7b_profile_default.py
+│       ├── 6c2fde7b6037_profile_done.py
+│       ├── 6eafffe052d7_users_table_done.py
+│       ├── 7d3916d25174_profile_default.py
+│       ├── 7f2b1c96f698_password_column_added.py
+│       ├── 8806796abc37_dummy.py
+│       ├── 9ab021931889_profile_default.py
+│       ├── addcaf42a687_workout_session_done.py
+│       ├── b55daa179242_nullable_fixes.py
+│       ├── b72b38ebca0f_profile_default.py
+│       ├── c0b082b17b8e_column_lengths_fixed.py
+│       ├── c371be70b8eb_column_lengths_fixed.py
+│       ├── d943dc90d950_deletion_cascade_added_to_user_profile.py
+│       ├── dd0c66a2b301_user_profile_default_value_set.py
+│       ├── ebcb6bc0e75e_user_profile_default_value_set.py
+│       ├── f42789a53e66_profile_default.py
+│       ├── fad2aab35e37_profile_default.py
+│       └── fe3eb93076f3_added_multi_column_uniqueness_.py
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── rules.txt
+├── scripts
+│   └── initdb.sql
+├── src
+│   ├── ai
+│   ├── api
+│   │   ├── crud
+│   │   │   ├── exercises.py
+│   │   │   ├── __init__.py
+│   │   │   ├── profile.py
+│   │   │   └── users.py
+│   │   ├── __init__.py
+│   │   ├── models
+│   │   │   ├── base.py
+│   │   │   ├── enums.py
+│   │   │   ├── exercises.py
+│   │   │   ├── __init__.py
+│   │   │   ├── plan_feedback.py
+│   │   │   ├── session_exercises.py
+│   │   │   ├── user_profiles.py
+│   │   │   ├── users.py
+│   │   │   ├── workout_plans.py
+│   │   │   └── workout_sessions.py
+│   │   ├── routers
+│   │   │   ├── exercises.py
+│   │   │   ├── __init__.py
+│   │   │   └── users.py
+│   │   └── schemas
+│   │       ├── __init__.py
+│   │       └── v1
+│   ├── db.py
+│   ├── __init__.py
+│   └── main.py
+├── tests
+│   ├── api
+│   │   ├── conftest.py
+│   │   ├── crud
+│   │   │   ├── __init__.py
+│   │   │   ├── test_crud_exercises.py
+│   │   │   ├── test_crud_profile.py
+│   │   │   └── test_crud_users.py
+│   │   ├── fixtures.py
+│   │   ├── __init__.py
+│   │   ├── schemas
+│   │   │   ├── __init__.py
+│   │   │   └── v1
+│   │   ├── test_general_model_structure.py
+│   │   └── unit
+│   │       ├── conftest.py
+│   │       ├── fixtures.py
+│   │       ├── __init__.py
+│   │       └── test_endpoint_users.py
+│   ├── conftest.py
+│   ├── factories
+│   │   ├── __init__.py
+│   │   └── models.py
+│   ├── fixtures.py
+│   ├── __init__.py
+│   ├── test_dummies.py
+│   └── utils.py
+├── tree.txt
+└── uv.lock
+
+19 directories, 84 files

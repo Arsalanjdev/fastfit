@@ -382,7 +382,7 @@ dependencies = [
     { name = "argon2-cffi" },
     { name = "fastapi" },
     { name = "httpx" },
-    { name = "psycopg" },
+    { name = "psycopg2" },
     { name = "pydantic", extra = ["email"] },
     { name = "python-dotenv" },
     { name = "sqlalchemy" },
@@ -395,7 +395,6 @@ dev = [
     { name = "black" },
     { name = "faker" },
     { name = "hypothesis" },
-    { name = "psycopg2" },
     { name = "psycopg2-binary" },
     { name = "pytest" },
     { name = "pytest-alembic" },
@@ -409,7 +408,7 @@ requires-dist = [
     { name = "argon2-cffi", specifier = ">=25.1.0" },
     { name = "fastapi", specifier = ">=0.116.1" },
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "psycopg", specifier = ">=3.2.9" },
+    { name = "psycopg2", specifier = ">=2.9.10" },
     { name = "pydantic", extras = ["email"], specifier = ">=2.11.7" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "sqlalchemy", specifier = ">=2.0.41" },
@@ -422,7 +421,6 @@ dev = [
     { name = "black", specifier = ">=25.1.0" },
     { name = "faker", specifier = ">=37.4.2" },
     { name = "hypothesis", specifier = ">=6.136.6" },
-    { name = "psycopg2", extras = ["binary"], specifier = ">=2.9.10" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pytest", specifier = ">=8.4.1" },
     { name = "pytest-alembic", specifier = ">=0.12.1" },
@@ -644,19 +642,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3", size = 69412, upload-time = "2025-05-15T12:30:07.975Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
-]
-
-[[package]]
-name = "psycopg"
-version = "3.2.9"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.13'" },
-    { name = "tzdata", marker = "sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/27/4a/93a6ab570a8d1a4ad171a1f4256e205ce48d828781312c0bbaff36380ecb/psycopg-3.2.9.tar.gz", hash = "sha256:2fbb46fcd17bc81f993f28c47f1ebea38d66ae97cc2dbc3cad73b37cefbff700", size = 158122, upload-time = "2025-05-13T16:11:15.533Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/44/b0/a73c195a56eb6b92e937a5ca58521a5c3346fb233345adc80fd3e2f542e2/psycopg-3.2.9-py3-none-any.whl", hash = "sha256:01a8dadccdaac2123c916208c96e06631641c0566b22005493f09663c7a8d3b6", size = 202705, upload-time = "2025-05-13T16:06:26.584Z" },
 ]
 
 [[package]]

@@ -1,7 +1,6 @@
 import os
 from logging.config import fileConfig
 
-import dotenv
 from alembic import context
 from sqlalchemy import create_engine, pool
 
@@ -28,16 +27,26 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-dotenv.load_dotenv()
-db_username = os.getenv("DB_USER")
-db_password = os.getenv("DB_PASSWORD")
-db_name = os.getenv("DB_NAME")
-db_host = os.getenv("DB_HOST")
-db_port = os.getenv("DB_PORT")
-config.set_main_option(
-    "sqlalchemy.url",
-    f"postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}",
-)
+# Get environment
+env = os.getenv("ENV", "dev")
+
+# Load .env only in non-test environments
+if env != "test":
+    import dotenv
+
+    dotenv.load_dotenv()
+
+# Use DATABASE_URL if available, otherwise construct from components
+db_url = os.getenv("DATABASE_URL")
+if not db_url:
+    db_username = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    db_name = os.getenv("DB_NAME")
+    db_host = os.getenv("DB_HOST")
+    db_port = os.getenv("DB_PORT")
+    db_url = f"postgresql://{db_username}:{db_password}@{db_host}:5432/{db_name}"
+
+config.set_main_option("sqlalchemy.url", db_url)
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -76,14 +85,8 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    # Choose between the Test mode and the dev mode
-    connectable = os.getenv("TEST_DB_URL") or config.get_main_option("sqlalchemy.url")
-    engine = create_engine(connectable, poolclass=pool.NullPool)
-    # connectable = engine_from_config(
-    #     config.get_section(config.config_ini_section, {}),
-    #     prefix="sqlalchemy.",
-    #     poolclass=pool.NullPool,
-    # )
+    url = config.get_main_option("sqlalchemy.url")
+    engine = create_engine(url, poolclass=pool.NullPool)
 
     with engine.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
