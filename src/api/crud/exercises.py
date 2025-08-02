@@ -1,4 +1,5 @@
-from typing import Optional
+import uuid
+from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -28,11 +29,11 @@ def find_duplicated_exercise(
     existing = (
         db.query(Exercise)
         .filter(
-            name == name,
-            muscle_group == muscle_group,
-            difficulty == difficulty,
-            equipment_required == equipment_required,
-            description == description,
+            Exercise.name == name,
+            Exercise.muscle_group == muscle_group,
+            Exercise.difficulty == difficulty,
+            Exercise.equipment_required == equipment_required,
+            Exercise.description == description,
         )
         .first()
     )
@@ -69,3 +70,75 @@ def create_exercise_db(
     db.commit()
     db.refresh(exercise)
     return exercise
+
+
+def get_exercise_by_id(db: Session, exercise_id: uuid.UUID) -> Exercise | None:
+    return db.get(Exercise, exercise_id)
+
+
+def get_exercises_by_name(db: Session, name: str) -> List[Exercise] | None:
+    """
+    Returns a list of exercises that shares the same name.
+    :param db:
+    :param name:
+    :return: List of exercises
+    """
+    return db.query(Exercise).filter(Exercise.name == name).all()
+
+
+def get_exercises_by_difficulty(db: Session, difficulty: str) -> List[Exercise] | None:
+    """
+    Returns a list of exercises that share the same difficulty.
+    :param db:
+    :param difficulty:
+    :return:
+    """
+    return db.query(Exercise).filter(Exercise.difficulty == difficulty).all()
+
+
+def get_exercises_by_muscle_group(
+    db: Session, muscle_group: str
+) -> List[Exercise] | None:
+    """
+    Returns a list of exercises that share the same muscle group focus.
+    :return:
+    """
+    return db.query(Exercise).filter(Exercise.muscle_group == muscle_group).all()
+
+
+def update_exercise_field(
+    db: Session,
+    exercise: Exercise,
+    field_name: str,
+    value,
+) -> Exercise:
+    """
+    updates an exercise field.
+    :param db:
+    :param exercise:
+    :param field_name:
+    :param value:
+    :return:
+    """
+    if not hasattr(exercise, field_name):
+        raise AttributeError(f"Exercise doesn't have a {field_name} column.")
+
+    setattr(exercise, field_name, value)
+    db.commit()
+    db.refresh(exercise)
+    return exercise
+
+
+def delete_exercise(db: Session, exercise_id: uuid.UUID) -> bool:
+    """
+    Deletes an exercise.
+    :param db:
+    :param exercise_id:
+    :return: True if exercise was deleted. False otherwise.
+    """
+    to_delete = get_exercise_by_id(db, exercise_id)
+    if to_delete is None:
+        return False
+    db.delete(to_delete)
+    db.commit()
+    return True
