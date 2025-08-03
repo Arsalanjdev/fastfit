@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     curl \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # Install the application dependencies.
@@ -15,6 +16,7 @@ RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-dev --no-cache
 
+ENV PATH="/code/.venv/bin:$PATH"
 # Copy the application into the container.
 COPY . .
 #
