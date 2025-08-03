@@ -43,7 +43,7 @@ def create_workout_session(
 
 
 def get_workout_session(db: Session, session_id: UUID) -> WorkoutSession:
-    return db.query(WorkoutSession).get(session_id)
+    return db.get(WorkoutSession, session_id)
 
 
 def get_all_workout_sessions_by_user(

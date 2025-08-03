@@ -1,9 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Query
-from sqlalchemy.future import select
-
-from src import Exercise, db
+from fastapi import APIRouter
 
 router = APIRouter()
 

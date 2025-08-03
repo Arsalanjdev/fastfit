@@ -11,7 +11,6 @@ from src.api.crud.workout_sessions import (
     update_workout_session_field,
 )
 from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
-from tests.utils import is_iso_datetime
 
 
 @pytest.fixture
@@ -69,21 +68,23 @@ def test_crud_workout_sessions_create(db_session, test_user_data):
 
 
 def test_crud_get_all_workout_sessions_by_user(db_session, test_user_data):
-    user, _ = create_user_with_profile(db_session, **test_user_data)
+    user_data_1 = test_user_data.copy()
+    user_data_1["email"] = "test1@example.com"
+    user, _ = create_user_with_profile(db_session, **user_data_1)
     dummy_session_data = dummy_session()
-    create_workout_session(db_session, user_id=user.user_id, **dummy_session_data())
-    create_workout_session(db_session, user_id=user.user_id, **dummy_session_data())
+    create_workout_session(db_session, user_id=user.user_id, **dummy_session_data)
+    dummy_session_data["start_time"] = datetime.now()
+    create_workout_session(db_session, user_id=user.user_id, **dummy_session_data)
 
     other_user, _ = create_user_with_profile(db_session, **test_user_data)
-    create_workout_session(
-        db_session, user_id=other_user.user_id, **dummy_session_data()
-    )
+    create_workout_session(db_session, user_id=other_user.user_id, **dummy_session_data)
 
     sessions = get_all_workout_sessions_by_user(db_session, user.user_id)
 
     assert len(sessions) >= 2
     for s in sessions:
         assert s.user_id == user.user_id
+    db_session.delete(other_user)
     db_session.delete(user)
     db_session.commit()
 
@@ -114,7 +115,7 @@ def test_crud_update_workout_session_field(db_session, test_user_data):
 def test_crud_delete_workout_session(db_session, test_user_data):
     user, _ = create_user_with_profile(db_session, **test_user_data)
     dummy_session_data = dummy_session()
-    session_data = dummy_session_data()
+    session_data = dummy_session_data
     workout_session = create_workout_session(
         db_session, user_id=user.user_id, **session_data
     )
