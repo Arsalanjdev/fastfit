@@ -23,4 +23,4 @@ COPY . .
 #RUN groupadd -r nonroot && useradd -r -g nonroot nonroot
 #USER nonroot
 
-CMD ["/code/.venv/bin/uvicorn", "src.main:fastfitapi", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/code/.venv/bin/uvicorn", "src.main:fastfitapi", "--host", "0.0.0.0", "--port", "8000", "--reload"]

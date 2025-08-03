@@ -46,7 +46,7 @@ def get_db():
         init_db()
     db = SessionLocal()
     try:
-        yield engine, db
+        yield db
     finally:
         db.close()
 

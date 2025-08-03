@@ -5,7 +5,7 @@ import pytest
 
 from src.api.crud.exercises import (
     create_exercise_db,
-    delete_exercise,
+    delete_exercise_db,
     get_exercise_by_id,
     get_exercises_by_difficulty,
     get_exercises_by_muscle_group,
@@ -195,7 +195,7 @@ def test_delete_exercise(db_session) -> None:
     exercise = dummy_exercise()
     exercise_db = create_exercise_db(db_session, **exercise)
     id = exercise_db.exercise_id
-    is_deleted = delete_exercise(db_session, exercise_db.exercise_id)
+    is_deleted = delete_exercise_db(db_session, exercise_db.exercise_id)
     assert is_deleted
     assert get_exercise_by_id(db_session, id) is None
 
@@ -207,5 +207,5 @@ def test_delete_exercise_non_existent(db_session) -> None:
     :return:
     """
     id = uuid.uuid4()
-    to_delete = delete_exercise(db_session, id)
+    to_delete = delete_exercise_db(db_session, id)
     assert to_delete is False

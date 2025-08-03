@@ -8,7 +8,7 @@ from tests.factories.models import get_random_user_dict
 from tests.utils import is_iso_datetime, is_valid_uuid
 
 
-def test_endpoint_users_create(client: httpx.Client, monkeypatch):
+def test_unit_endpoint_users_create(client: httpx.Client, monkeypatch):
     random_user = get_random_user_dict()
 
     def create_user(*args, **kwargs):
@@ -41,15 +41,15 @@ def test_endpoint_users_create(client: httpx.Client, monkeypatch):
     assert response_dict.get("is_active")
 
 
-def test_endpoint_users_signup_missing_email(client):
+def test_unit_endpoint_users_signup_missing_email(client):
     response = client.post("/v1/users/sign-up", json={"password": "dawiooYAR(W*Y%124"})
     assert response.status_code == 422
 
 
-def test_endpoint_users_signup_missing_password(client):
+def test_unit_endpoint_users_signup_missing_password(client):
     response = client.post("/v1/users/sign-up", json={"email": "mail@example.com"})
     assert response.status_code == 422
 
 
-def test_endpoint_users_signin(client):
+def test_unit_endpoint_users_signin(client):
     pass

@@ -1,6 +1,7 @@
 import uuid
 from typing import List, Optional
 
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from src.api.models.enums import DifficultyEnum
@@ -129,7 +130,7 @@ def update_exercise_field(
     return exercise
 
 
-def delete_exercise(db: Session, exercise_id: uuid.UUID) -> bool:
+def delete_exercise_db(db: Session, exercise_id: uuid.UUID) -> bool:
     """
     Deletes an exercise.
     :param db:
@@ -142,3 +143,15 @@ def delete_exercise(db: Session, exercise_id: uuid.UUID) -> bool:
     db.delete(to_delete)
     db.commit()
     return True
+
+
+def get_all_exercises_db(db: Session, limit: int, offset: int) -> List[Exercise]:
+    """
+    Returns a list of exercises limited by limit and offseted.
+    :param db:
+    :param limit:
+    :param offset:
+    :return:
+    """
+    query = select(Exercise).offset(offset).limit(limit)
+    return db.execute(query).scalars().all()
