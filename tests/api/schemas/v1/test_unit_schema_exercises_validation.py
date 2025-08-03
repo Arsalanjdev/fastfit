@@ -74,7 +74,7 @@ def test_schema_exercise_create(
 
 
 @given(name=st.text(min_size=0, max_size=2))
-def test_invalid_name_too_short(name):
+def test_schema_create_invalid_name_too_short(name):
     with pytest.raises(ValidationError):
         ExerciseCreate(
             name=name,
@@ -84,7 +84,7 @@ def test_invalid_name_too_short(name):
         )
 
 
-def test_exercise_create_invalid_difficulty():
+def test_schema_exercise_create_invalid_difficulty():
     with pytest.raises(ValidationError):
         ExerciseCreate(
             name="Push Up",
@@ -94,7 +94,7 @@ def test_exercise_create_invalid_difficulty():
         )
 
 
-def test_exercise_create_equipment_wrong_type():
+def test_schema_exercise_create_equipment_wrong_type():
     with pytest.raises(ValidationError):
         ExerciseCreate(
             name="Push Up",
@@ -104,7 +104,7 @@ def test_exercise_create_equipment_wrong_type():
         )
 
 
-def test_exercise_create_missing_required_field():
+def test_schema_exercise_create_missing_required_field():
     with pytest.raises(ValidationError):
         ExerciseCreate(
             name="Push Up",
@@ -122,7 +122,7 @@ def test_exercise_create_missing_required_field():
     ),
     difficulty=st.one_of(st.none(), st.sampled_from(list(DifficultyEnum))),
 )
-def test_valid_exercise_update(
+def test_schema_valid_exercise_update(
     name, description, muscle_group, equipment_required, difficulty
 ):
     data = {}
@@ -160,7 +160,7 @@ def test_valid_exercise_update(
         ("difficulty", "expert"),  # invalid enum value
     ],
 )
-def test_invalid_exercise_update(field, value):
+def test_schema_invalid_exercise_update(field, value):
     data = {field: value}
     with pytest.raises(ValidationError):
         ExerciseUpdate(**data)

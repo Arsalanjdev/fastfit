@@ -22,7 +22,12 @@ class User(Base):
         server_default=UserRole.user.value,
         nullable=False,
     )
-
+    workout_sessions = relationship(
+        "WorkoutSession",
+        backref="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
     profile = relationship(
         "UserProfile",
         back_populates="user",

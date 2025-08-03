@@ -36,6 +36,7 @@ if env != "test":
 
     dotenv.load_dotenv()
 
+
 # Use DATABASE_URL if available, otherwise construct from components
 db_url = os.getenv("DATABASE_URL")
 if not db_url:
@@ -43,7 +44,6 @@ if not db_url:
     db_password = os.getenv("DB_PASSWORD")
     db_name = os.getenv("DB_NAME")
     db_host = os.getenv("DB_HOST")
-    db_port = os.getenv("DB_PORT")
     db_url = f"postgresql://{db_username}:{db_password}@{db_host}:5432/{db_name}"
 
 config.set_main_option("sqlalchemy.url", db_url)

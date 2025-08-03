@@ -30,6 +30,8 @@ services:
     volumes:
       - ./src:/code/src
     command: ["/code/.venv/bin/uvicorn", "src.main:fastfitapi", "--host", "0.0.0.0", "--port", "8080"]
+    environment:
+      - DB_HOST=dev-db
 
 
 volumes:

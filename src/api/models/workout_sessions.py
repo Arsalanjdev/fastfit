@@ -22,7 +22,11 @@ class WorkoutSession(Base):
     session_id = Column(
         UUID(as_uuid=True), nullable=False, default=uuid4, primary_key=True
     )
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False)
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+    )
     start_time = Column(DateTime(timezone=True), nullable=True)
     perceived_intensity = Column(Integer, nullable=True)
     duration_minutes = Column(Integer, nullable=True)
