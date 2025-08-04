@@ -1,7 +1,7 @@
 from typing import Annotated, Optional
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.api.models.enums import DifficultyEnum
 
@@ -39,6 +39,7 @@ class ExerciseBase(BaseModel):
 
 class ExerciseRead(ExerciseBase):
     exercise_id: Annotated[UUID, Field(description="Exercise UUID")]
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ExerciseCreate(ExerciseBase):

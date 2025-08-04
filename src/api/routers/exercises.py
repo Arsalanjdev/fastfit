@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.openapi.models import Response
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
@@ -11,6 +11,7 @@ from src.api.crud.exercises import (
     create_exercise_db,
     get_all_exercises_db,
     get_exercise_by_id,
+    update_exercise_db,
 )
 from src.api.schemas.v1.exercises import ExerciseCreate, ExerciseRead, ExerciseUpdate
 from src.db import get_db
@@ -45,6 +46,8 @@ async def get_exercise(
     db: Session = Depends(get_db),
 ):
     exercise = get_exercise_by_id(db, exercise_id)
+    if not exercise:
+        raise HTTPException(status_code=404, detail="Exercise not found")
     return exercise
 
 
@@ -54,8 +57,11 @@ async def update_exercise(
     exercise: ExerciseUpdate,
     db: Session = Depends(get_db),
 ):
-    exercise = update_exercise(db, exercise_id, **exercise.model_dump())
-    return exercise
+    exercise_db = get_exercise_by_id(db, exercise_id)
+    if not exercise_db:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    exercise_updated = update_exercise_db(db, exercise_db, **exercise.model_dump())
+    return exercise_updated
 
 
 @router.delete("/{exercise_id}/", status_code=204)

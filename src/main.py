@@ -4,7 +4,7 @@ import os
 from fastapi import FastAPI
 
 from src.api.models.base import Base
-from src.api.routers import exercises, users
+from src.api.routers import exercises, users, workout_plans
 
 logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
 logger = logging.getLogger("fastfitapi")
@@ -15,6 +15,9 @@ fastfitapi.include_router(
 )
 fastfitapi.include_router(
     exercises.router, prefix="/v1/exercises", tags=["v1", "exercise"]
+)
+fastfitapi.include_router(
+    workout_plans.router, prefix="/v1/workout-plans", tags=["v1", "workout-plan"]
 )
 
 # Skip DB setup in tests

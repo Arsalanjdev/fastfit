@@ -10,7 +10,7 @@ from src.api.crud.exercises import (
     get_exercises_by_difficulty,
     get_exercises_by_muscle_group,
     get_exercises_by_name,
-    update_exercise_field,
+    update_exercise_db,
 )
 from src.api.models.enums import DifficultyEnum
 from tests.utils import is_valid_uuid
@@ -158,7 +158,7 @@ def test_update_exercise_field_success(db_session) -> None:
 
     original_difficulty = exercise_db.difficulty
 
-    exercise_updated = update_exercise_field(
+    exercise_updated = update_exercise_db(
         db_session, exercise_db, "difficulty", DifficultyEnum.INTERMEDIATE.value
     )
 
@@ -178,7 +178,7 @@ def test_update_exercise_field_failure(db_session) -> None:
     exercise_db = create_exercise_db(db_session, **exercise_data)
 
     with pytest.raises(AttributeError) as exc_info:
-        update_exercise_field(db_session, exercise_db, "non_existent_field", "value")
+        update_exercise_db(db_session, exercise_db, "non_existent_field", "value")
 
     assert "doesn't have a non_existent_field column" in str(exc_info.value)
 

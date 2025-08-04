@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Annotated, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # start_time = Column(DateTime(timezone=True), nullable=True)
 # perceived_intensity = Column(Integer, nullable=True)
@@ -70,6 +70,9 @@ class WorkoutSessionCreate(WorkoutSession):
 
 class WorkoutSessionRead(WorkoutSession):
     session_id: Annotated[uuid.UUID, Field(description="The Session Id")]
+    user_id: Annotated[uuid.UUID, Field(description="The User Id")]
+    # exercises: Annotated[WorkoutSession] #TODO
+    model_config = ConfigDict(from_attributes=True)
 
 
 class WorkoutSessionUpdate(WorkoutSession):

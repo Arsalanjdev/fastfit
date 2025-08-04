@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from uuid import UUID
 
@@ -96,6 +97,7 @@ def test_schema_workout_session_read_valid(session_id, start_time):
     # Add minimal required fields with defaults or valid dummy values
     data.update(
         {
+            "user_id": uuid.uuid4(),
             "perceived_intensity": 5,
             "duration_minutes": 30,
             "notes": "Some notes",

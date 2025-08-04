@@ -107,7 +107,7 @@ def get_exercises_by_muscle_group(
     return db.query(Exercise).filter(Exercise.muscle_group == muscle_group).all()
 
 
-def update_exercise_field(
+def update_exercise_db(
     db: Session,
     exercise: Exercise,
     field_name: str,
