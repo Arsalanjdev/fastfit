@@ -13,8 +13,8 @@ from src.api.crud.exercises import (
     get_exercise_by_id,
     update_exercise_db,
 )
+from src.api.dependencies.db import get_db
 from src.api.schemas.v1.exercises import ExerciseCreate, ExerciseRead, ExerciseUpdate
-from src.db import get_db
 
 router = APIRouter()
 

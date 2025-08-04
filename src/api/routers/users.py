@@ -1,13 +1,11 @@
-from argon2 import PasswordHasher
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette import status
 
 from src.api.crud.users import create_user_db
+from src.api.dependencies.db import get_db
+from src.api.dependencies.hashing import password_hasher
 from src.api.schemas.v1.users import UserCreate, UserLogin, UserRead
-from src.db import get_db
-
-ph = PasswordHasher()
 
 router = APIRouter()
 
@@ -18,7 +16,7 @@ router = APIRouter()
 async def sign_up(create_data: UserCreate, db: Session = Depends(get_db)):
     # TODO: check for duplicated email
     email = create_data.email
-    password = ph.hash(create_data.password)
+    password = password_hasher.hash(create_data.password)
     user = create_user_db(db, email, password)
     return user
 

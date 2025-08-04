@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from src.api.crud.workout_plans import create_workout_plan_db, get_workout_plan_by_id
+from src.api.dependencies.db import get_db
 from src.api.schemas.v1.workout_plans import WorkoutPlansCreate, WorkoutPlansRead
-from src.db import get_db
 
 router = APIRouter()
 
