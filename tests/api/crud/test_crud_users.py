@@ -16,6 +16,7 @@ from src.api.crud.users import (
     delete_user_db,
     get_user_by_email,
     get_user_by_id,
+    is_email_duplicated,
 )
 from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 from tests.utils import is_iso_datetime, is_valid_uuid
@@ -114,6 +115,15 @@ def test_crud_user_get_user_by_email(db_session):
     assert user_none is None
 
     db_session.delete(user_created)
+    db_session.commit()
+
+
+def test_is_email_duplicated(db_session):
+    email = "email@example.com"
+    user1 = create_user_db(db_session, email=email, password="password")
+    is_duplicated = is_email_duplicated(db_session, email)
+    assert is_duplicated is True
+    db_session.delete(user1)
     db_session.commit()
 
 

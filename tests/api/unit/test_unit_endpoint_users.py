@@ -51,5 +51,22 @@ def test_unit_endpoint_users_signup_missing_password(client):
     assert response.status_code == 422
 
 
-def test_unit_endpoint_users_signin(client):
-    pass
+#
+# def test_unit_endpoint_users_change_password(client):
+#     random_user = get_random_user_dict()
+#     password = random_user.get("password")
+#     email = random_user.get("email")
+#
+#     def change_password(*args, **kwargs):
+#         return {
+#             "user_id": uuid.uuid4(),
+#             "password": "NewwwwPPPPPas2221",
+#             "created_at": datetime.now().isoformat(),
+#             "is_active": True,
+#             "role": "user",
+#         }
+#
+#     monkeypatch.setattr("src.api.routers.users.change_password_db", change_password)
+#     response = client.post(
+#         "/v1/users/change-password", json=jsonable_encoder(random_user)
+#     )

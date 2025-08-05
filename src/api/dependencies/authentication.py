@@ -26,7 +26,7 @@ def create_access_token(
 
 
 def get_authenticated_current_user(
-    token: str = Depends(),
+    token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ):
     credentials_exception = HTTPException(

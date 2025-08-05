@@ -11,3 +11,5 @@ def pytest_collection_modifyitems(items):
             item.add_marker(pytest.mark.crud)
         if "endpoint" in item.name:
             item.add_marker(pytest.mark.endpoint)
+        if "integration" in item.name:
+            item.add_marker(pytest.mark.integration)

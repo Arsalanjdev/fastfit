@@ -120,3 +120,16 @@ def delete_user_db(
     db.delete(user)
     db.commit()
     return True
+
+
+def is_email_duplicated(db: Session, email: str) -> bool:
+    """
+    Returns True if email is already taken, False otherwise.
+    :param db:
+    :param email:
+    :return:
+    """
+    possible_candid = get_user_by_email(db, email)
+    if possible_candid:
+        return True
+    return False

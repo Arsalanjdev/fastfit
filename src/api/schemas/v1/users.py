@@ -5,6 +5,8 @@ from typing import Annotated, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
+from src.api.schemas.v1.profiles import UserProfileCreate, UserProfileRead
+
 
 class UserEnum(str, Enum):
     user = "user"
@@ -60,3 +62,13 @@ class UserUpdate(BaseModel):
 
 class UserLogin(UserAuthBase):
     pass
+
+
+class UserReadWithProfile(BaseModel):
+    user: UserRead
+    profile: UserProfileRead
+
+
+class UserCreateWithProfile(BaseModel):
+    user: UserCreate
+    profile: UserProfileCreate
