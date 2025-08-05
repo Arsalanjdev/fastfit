@@ -21,11 +21,4 @@ async def sign_up(create_data: UserCreate, db: Session = Depends(get_db)):
     return user
 
 
-@router.post(
-    "/users/sign-in/", status_code=status.HTTP_200_OK, response_model=UserLogin
-)
-async def sign_in(login_data: UserLogin, db: Session = Depends(get_db)):
-    pass
-
-
 # TODO change password
