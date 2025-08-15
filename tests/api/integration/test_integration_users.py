@@ -11,7 +11,7 @@ def test_integration_users_signup_duplicated_email(db_session, client):
     :return:
     """
     # signing up the first user
-    email = "email@example.com"
+    email = "email5@example.com"
     password = "!AWEHwioe41j250!"
     response = client.post(
         "/v1/users/sign-up", json={"email": email, "password": password}

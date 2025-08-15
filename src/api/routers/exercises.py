@@ -13,7 +13,9 @@ from src.api.crud.exercises import (
     get_exercise_by_id,
     update_exercise_db,
 )
+from src.api.dependencies.authentication import get_authenticated_current_user
 from src.api.dependencies.db import get_db
+from src.api.models.users import User
 from src.api.schemas.v1.exercises import ExerciseCreate, ExerciseRead, ExerciseUpdate
 
 router = APIRouter()
@@ -22,7 +24,13 @@ router = APIRouter()
 @router.post(
     "/create/", response_model=ExerciseRead, status_code=status.HTTP_201_CREATED
 )
-async def create_exercise(exercise: ExerciseCreate, db: Session = Depends(get_db)):
+async def create_exercise(
+    exercise: ExerciseCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_authenticated_current_user),
+):
+    # if user.role not in ["admin", "coach"]:
+    #     raise HTTPException(status_code=403)
     exercise_created = create_exercise_db(db, **exercise.model_dump())
     return exercise_created
 

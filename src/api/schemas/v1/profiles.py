@@ -9,8 +9,10 @@ from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 
 
 class UserProfileBase(BaseModel):
-    birth_date: Annotated[date, Field(description="Date of birth")]
-    gender: Annotated[GenderEnum, Field(description="Gender of the user")]
+    birth_date: Annotated[date, Field(description="Date of birth")] = date(1970, 1, 1)
+    gender: Annotated[GenderEnum, Field(description="Gender of the user")] = (
+        GenderEnum.unspecified
+    )
     height_cm: Annotated[
         Decimal,
         Field(

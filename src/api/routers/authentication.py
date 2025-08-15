@@ -21,12 +21,11 @@ async def login(
 
     password = form_data.password
     if not password_hasher.verify(user.password, password):
-        raise HTTPException(status_code=400, detail="Incorrect password")
+        raise HTTPException(status_code=401, detail="Incorrect password")
 
     token = create_access_token({"sub": user.email})
     return {
         "access_token": token,
         "token_type": "bearer",
-        "user_email": user.email,
         "user_id": user.user_id,
     }
