@@ -1,16 +1,9 @@
-import uuid
 from datetime import date, timedelta
 
-import pytest
-from sqlalchemy.orm import Session
-
-from src import User, WorkoutPlans
-from src.api.crud.users import create_user_with_profile, delete_user_db
 from src.api.crud.workout_plans import (
     create_workout_plan_db,
     get_workout_plans_by_user_id,
 )
-from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 from tests.utils import is_valid_uuid
 
 # plan_id = Column(UUID(as_uuid=True), default=uuid4, primary_key=True)

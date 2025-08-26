@@ -1,14 +1,3 @@
-import uuid
-from datetime import date, datetime
-from decimal import Decimal
-
-import httpx
-from fastapi.encoders import jsonable_encoder
-
-from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
-from tests.factories.models import get_random_user_dict
-from tests.utils import is_iso_datetime, is_valid_uuid
-
 # def test_unit_endpoint_users_create(client: httpx.Client, monkeypatch):
 #     random_user = get_random_user_dict()
 #

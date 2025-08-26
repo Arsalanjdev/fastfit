@@ -1,8 +1,5 @@
 from datetime import date
 
-import pytest
-from fastapi import HTTPException
-
 from src.api.crud.users import delete_user_db
 from src.api.models.enums import FitnessLevelEnum, GenderEnum, PrimaryGoalEnum
 
