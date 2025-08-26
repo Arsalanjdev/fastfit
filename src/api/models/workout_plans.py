@@ -21,7 +21,11 @@ class WorkoutPlans(Base):
     __tablename__ = "workout_plans"
 
     plan_id = Column(UUID(as_uuid=True), default=uuid4, primary_key=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"), nullable=False)
+    user_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("users.user_id", ondelete="CASCADE"),
+        nullable=False,
+    )
     generated_at = Column(DateTime, server_default=func.now(), nullable=False)
     valid_from = Column(Date, nullable=True)
     valid_to = Column(Date, nullable=True)

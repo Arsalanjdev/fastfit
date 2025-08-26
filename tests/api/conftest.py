@@ -1,5 +1,5 @@
 from .fixtures import client  # Noqa: F401
-from .fixtures import db_inspect  # noqa: F401
+from .fixtures import db_inspect, user_factory  # noqa: F401
 
 # from tests.fixtures import db_session
 # from src.main import fastfitapi

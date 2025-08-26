@@ -36,7 +36,7 @@ def get_authenticated_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_email: str = payload.get("user_email")
+        user_email: str = payload.get("sub")
         if user_email is None:
             raise credentials_exception
     except JWTError:
